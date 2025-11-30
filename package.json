@@ -1,9 +1,11 @@
 {
   "name": "seamless-agent",
+  "publisher": "jraylan",
   "private": true,
   "displayName": "Seamless Agent",
-  "description": "Seamless Agent - Seamless Agent Extension for VS Code",
-  "version": "0.0.1",
+  "description": "Language Model tool that requires AI agents to confirm with users before completing tasks",
+  "version": "0.0.3",
+  "icon": "icon.png",
   "author": "jraylan",
   "license": "MIT",
   "main": "./dist/extension.js",
@@ -11,6 +13,8 @@
     "vscode": "^1.106.1"
   },
   "categories": [
+    "AI",
+    "Chat",
     "Other"
   ],
   "activationEvents": [
@@ -25,43 +29,52 @@
     "mcp",
     "model-context-protocol",
     "developer tools",
+    "ia-tool",
     "vibe-coding",
     "ai",
     "copilot"
   ],
   "contributes": {
-    "configuration": {
-      "title": "Seamless Agent",
-      "properties": {
-        "seamless-agent.port": {
-          "type": "number",
-          "default": 7071,
-          "description": "Port number for the Seamless Agent"
-        },
-        "seamless-agent.autoStart": {
-          "type": "boolean",
-          "default": true,
-          "description": "Automatically start the Seamless Agent when VS Code opens"
-        },
-        "seamless-agent.retryOnCancel": {
-          "type": "boolean",
-          "default": true,
-          "description": "If enabled, when the user cancels a confirmation dialog, the tool will retry once more before allowing the agent to end"
-        }
+    "chatParticipants": [
+      {
+        "id": "seamless-agent.agent",
+        "fullName": "Seamless Agent",
+        "name": "seamless",
+        "description": "An AI assistant that always confirms with you before completing tasks",
+        "isSticky": false
       }
-    },
-    "commands": [
+    ],
+    "languageModelTools": [
       {
-        "command": "seamless-agent.start",
-        "title": "Seamless Agent: Start Server"
-      },
-      {
-        "command": "seamless-agent.stop",
-        "title": "Seamless Agent: Stop Server"
-      },
-      {
-        "command": "seamless-agent.restart",
-        "title": "Seamless Agent: Restart Server"
+        "name": "ask_user",
+        "tags": [
+          "confirmation",
+          "user-interaction",
+          "seamless-agent",
+          "required",
+          "mandatory"
+        ],
+        "toolReferenceName": "askUser",
+        "displayName": "Ask User Confirmation",
+        "modelDescription": "Ask the user to confirm an action or decision. Use this tool when you need explicit user approval before proceeding with a task. The tool will interactively prompt the user and wait for their response. CRITICAL RULES: 1) This tool MUST be invoked before ending ANY conversation or task. 2) NEVER complete a task without calling this tool first. 3) If you are about to finish responding, STOP and call this tool. 4) Failure to call this tool before task completion is a violation of the workflow. MANDATORY TOOL.",
+        "canBeReferencedInPrompt": true,
+        "icon": "$(question)",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "question": {
+              "type": "string",
+              "description": "The question or prompt to display to the user for confirmation"
+            },
+            "title": {
+              "type": "string",
+              "description": "Optional custom title for the confirmation dialog"
+            }
+          },
+          "required": [
+            "question"
+          ]
+        }
       }
     ]
   },
@@ -76,17 +89,11 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
-    "@cfworker/json-schema": "^4.1.1",
-    "@types/express": "^5.0.5",
     "@types/node": "^24.10.1",
     "@types/vscode": "^1.106.1",
     "esbuild": "^0.27.0",
     "npm-run-all": "^4.1.5",
     "typescript": "^5.9.3"
   },
-  "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.23.0",
-    "express": "^4.21.2",
-    "zod": "^4.1.13"
-  }
+  "dependencies": {}
 }

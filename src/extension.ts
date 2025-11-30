@@ -1,52 +1,87 @@
 import * as vscode from 'vscode';
-import { McpServerManager } from './mcpServer';
+import { registerNativeTools } from './tools';
 
-let serverManager: McpServerManager | undefined;
+const PARTICIPANT_ID = 'seamless-agent.agent';
 
 export function activate(context: vscode.ExtensionContext) {
-    console.log('Seamless Agent extension is now active');
+    console.log('Seamless Agent extension active');
 
-    // Create server manager
-    serverManager = new McpServerManager();
+    // Register the ask_user tool
+    registerNativeTools(context);
 
-    // Register commands
-    const startCommand = vscode.commands.registerCommand('seamless-agent.start', async () => {
-        await serverManager?.start();
-    });
+    // Create a Chat Participant that uses our tool
+    const handler: vscode.ChatRequestHandler = async (
+        request: vscode.ChatRequest,
+        chatContext: vscode.ChatContext,
+        stream: vscode.ChatResponseStream,
+        token: vscode.CancellationToken
+    ) => {
+        // Get our ask_user tool
+        const askUserTool = vscode.lm.tools.find(t => t.name === 'ask_user');
 
-    const stopCommand = vscode.commands.registerCommand('seamless-agent.stop', async () => {
-        await serverManager?.stop();
-    });
+        // Get all available tools including ours
+        const tools = askUserTool ? [askUserTool] : [];
 
-    const restartCommand = vscode.commands.registerCommand('seamless-agent.restart', async () => {
-        await serverManager?.restart();
-    });
+        // Build the prompt with instruction to use the tool
+        const systemPrompt = `You are a helpful assistant. 
+IMPORTANT: You have access to an "ask_user" tool. You MUST use this tool before completing any task to confirm with the user that their request was fulfilled correctly.
+Never finish a response without first calling the ask_user tool to verify with the user.`;
 
-    context.subscriptions.push(startCommand, stopCommand, restartCommand);
+        const messages = [
+            vscode.LanguageModelChatMessage.User(systemPrompt),
+            vscode.LanguageModelChatMessage.User(request.prompt)
+        ];
 
-    // Auto-start if configured
-    const config = vscode.workspace.getConfiguration('seamless-agent');
-    if (config.get<boolean>('autoStart', true)) {
-        serverManager.start();
-    }
+        // Get the model
+        let model = request.model;
 
-    // Watch for configuration changes
-    context.subscriptions.push(
-        vscode.workspace.onDidChangeConfiguration(e => {
-            if (e.affectsConfiguration('mcp-server.port')) {
-                vscode.window.showInformationMessage(
-                    'MCP Server port changed. Restart the server to apply changes.',
-                    'Restart Now'
-                ).then(selection => {
-                    if (selection === 'Restart Now') {
-                        serverManager?.restart();
+        const options: vscode.LanguageModelChatRequestOptions = {
+            tools: tools.map(t => ({
+                name: t.name,
+                description: t.description,
+                inputSchema: t.inputSchema
+            })),
+        };
+
+        try {
+            const response = await model.sendRequest(messages, options, token);
+
+            for await (const part of response.stream) {
+                if (part instanceof vscode.LanguageModelTextPart) {
+                    stream.markdown(part.value);
+                } else if (part instanceof vscode.LanguageModelToolCallPart) {
+                    // Handle tool calls
+                    stream.progress(`Calling ${part.name}...`);
+                    const toolResult = await vscode.lm.invokeTool(part.name, {
+                        input: part.input,
+                        toolInvocationToken: request.toolInvocationToken
+                    }, token);
+
+                    // Show tool result
+                    for (const resultPart of toolResult.content) {
+                        if (resultPart instanceof vscode.LanguageModelTextPart) {
+                            stream.markdown(`\n\n**User Response:** ${resultPart.value}\n\n`);
+                        }
                     }
-                });
+                }
             }
-        })
-    );
+        } catch (err) {
+            if (err instanceof vscode.LanguageModelError) {
+                stream.markdown(`Error: ${err.message}`);
+            } else {
+                throw err;
+            }
+        }
+
+        return;
+    };
+
+    // Register the chat participant
+    const participant = vscode.chat.createChatParticipant(PARTICIPANT_ID, handler);
+    participant.iconPath = new vscode.ThemeIcon('question');
+
+    context.subscriptions.push(participant);
 }
 
 export function deactivate() {
-    serverManager?.stop();
 }
