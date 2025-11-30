@@ -21,7 +21,7 @@ export function registerNativeTools(context: vscode.ExtensionContext) {
             // 1. Parse parameters
             const params = options.input
             const question = params.question;
-            const title = params.title || 'Confirmation Required';
+            const title = params.title || l10n.confirmationRequired;
 
             // 2. Execute Logic (Ask the user)
             const result = await askViaVSCode(question, title);
@@ -47,8 +47,6 @@ export function registerNativeTools(context: vscode.ExtensionContext) {
 async function askViaVSCode(question: string, title: string): Promise<{ responded: boolean; response: string }> {
     const buttonText = l10n.respond;
 
-    // Use showWarningMessage which is more prominent and stays visible
-    // Also focus the VS Code window to ensure user sees it
     await vscode.commands.executeCommand('workbench.action.focusActiveEditorGroup');
 
     const selection = await vscode.window.showWarningMessage(

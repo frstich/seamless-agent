@@ -4,7 +4,7 @@
   "private": true,
   "displayName": "Seamless Agent",
   "description": "Language Model tool that requires AI agents to confirm with users before completing tasks",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "icon": "icon.png",
   "author": "jraylan",
   "license": "MIT",
