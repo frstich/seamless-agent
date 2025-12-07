@@ -27,7 +27,7 @@ Once installed, the `ask_user` tool is automatically available to GitHub Copilot
 Copilot will automatically use this tool when it needs your confirmation. When triggered:
 
 1. A notification appears in VS Code
-2. Click "Respond" to open the input dialog
+2. Click "Open Console" to open the request panel
 3. Type your response
 4. Copilot continues based on your input
 
@@ -60,6 +60,12 @@ This extension works out of the box with no configuration required.
 None at this time. Please report issues on [GitHub](https://github.com/jraylan/seamless-agent/issues).
 
 ## Release Notes
+
+## 0.1.5
+
+### Added
+
+- **Antigravity**: Added support to antigravity
 
 ## 0.1.4
 

@@ -4,7 +4,7 @@
   "private": true,
   "displayName": "Seamless Agent",
   "description": "Language Model tool that requires AI agents to confirm with users before completing tasks",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "icon": "resources/icon.png",
   "author": "jraylan",
   "contributors": [
@@ -20,7 +20,7 @@
   "license": "MIT",
   "main": "./dist/extension.js",
   "engines": {
-    "vscode": "^1.106.1"
+    "vscode": "^1.104.0"
   },
   "categories": [
     "AI",
@@ -124,7 +124,7 @@
   "devDependencies": {
     "@types/markdown-it": "^14.1.2",
     "@types/node": "^24.10.1",
-    "@types/vscode": "^1.106.1",
+    "@types/vscode": "^1.104.0",
     "esbuild": "^0.27.1",
     "npm-run-all": "^4.1.5",
     "typescript": "^5.9.3"

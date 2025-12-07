@@ -61,6 +61,12 @@ Nenhum até o momento. Por favor, reporte problemas no [GitHub](https://github.c
 
 ## Notas de Versão
 
+### 0.1.5
+
+#### Adicionado
+
+- **Antigravity**: Adicionado suporte ao Antigravity
+
 ### 0.1.4
 
 #### Corrigido
