@@ -41,14 +41,11 @@ Para garantir que a IA sempre peça a sua confirmação antes de concluir tarefa
 Utilize sempre a ferramenta ask_user antes de concluir qualquer tarefa para confirmar com o utilizador que o pedido foi atendido corretamente.
 ```
 
-Pode adicionar isto no VS Code indo a:
-
-- **Definições** → Pesquise por `github.copilot.chat.codeGeneration.instructions`
-- Ou adicione ao ficheiro `.github/copilot-instructions.md` no seu projeto
+Pode adicionar isto ao ficheiro `.github/copilot-instructions.md` no seu projeto
 
 ## Requisitos
 
-- VS Code 1.106.1 ou superior
+- VS Code 1.104.1 ou superior
 - Extensão GitHub Copilot Chat
 
 ## Definições

@@ -41,14 +41,11 @@ To ensure the AI always asks for your confirmation before completing tasks, add 
 Always use the ask_user tool before completing any task to confirm with the user that the request was fulfilled correctly.
 ```
 
-You can add this in VS Code by going to:
-
-- **Settings** → Search for `github.copilot.chat.codeGeneration.instructions`
-- Or add to your `.github/copilot-instructions.md` file in your project
+You can add this into your `.github/copilot-instructions.md` file in your project
 
 ## Requirements
 
-- VS Code 1.106.1 or higher
+- VS Code 1.104.1 or higher
 - GitHub Copilot Chat extension
 
 ## Extension Settings
