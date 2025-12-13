@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none'; style-src {{cspSource}} 'unsafe-inline'; font-src {{cspSource}}; script-src 'nonce-{{nonce}}';"
+    />
+    <link href="{{styleUri}}" rel="stylesheet" />
+    <link href="{{highlightStyleUri}}" rel="stylesheet" />
+    <link href="{{codiconsUri}}" rel="stylesheet" />
+    <title>Review Plan</title>
+  </head>
+  <body>
+    <div class="approve-plan-container">
+      <!-- Header with title and actions -->
+      <div class="header">
+        <h1 id="plan-title">{{paneTitle}}</h1>
+        <div class="header-actions">
+          <button id="approve-btn" class="btn btn-primary">
+            <span class="codicon codicon-check"></span>
+            {{approve}}
+          </button>
+          <button id="reject-btn" class="btn btn-secondary">
+            <span class="codicon codicon-edit"></span>
+            {{reject}}
+          </button>
+        </div>
+      </div>
+
+      <!-- Main content area -->
+      <div class="content-wrapper">
+        <!-- Markdown content with hoverable lines -->
+        <div class="plan-content" id="plan-content">
+          <!-- Content will be rendered here -->
+        </div>
+
+        <!-- Comments sidebar -->
+        <div class="comments-sidebar" id="comments-sidebar">
+          <h3 class="sidebar-title">
+            <span class="codicon codicon-comment-discussion"></span>
+            {{comments}}
+          </h3>
+          <div id="comments-list" class="comments-list">
+            <p class="no-comments">{{noComments}}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Comment dialog (modal) -->
+      <div id="comment-dialog" class="dialog-overlay hidden">
+        <div class="dialog">
+          <div class="dialog-header">
+            <h3 id="dialog-title">{{addComment}}</h3>
+            <button id="dialog-close" class="btn-icon" title="Close">
+              <span class="codicon codicon-close"></span>
+            </button>
+          </div>
+          <div class="dialog-content">
+            <div class="citation-preview" id="citation-preview"></div>
+            <textarea
+              id="comment-input"
+              class="comment-textarea"
+              placeholder="{{commentPlaceholder}}"
+              rows="4"
+            ></textarea>
+          </div>
+          <div class="dialog-actions">
+            <button id="dialog-save" class="btn btn-primary">{{save}}</button>
+            <button id="dialog-cancel" class="btn btn-secondary">
+              {{cancel}}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Store strings for JS -->
+    <script nonce="{{nonce}}">
+      window.__APPROVE_PLAN_STRINGS__ = {
+        addComment: "{{addComment}}",
+        editComment: "{{editComment}}",
+        removeComment: "{{removeComment}}",
+        noComments: "{{noComments}}",
+      };
+    </script>
+    <script nonce="{{nonce}}" src="{{scriptUri}}"></script>
+  </body>
+</html>

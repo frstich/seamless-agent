@@ -19,5 +19,16 @@
   "time.justNow": "agora mesmo",
   "time.minutesAgo": "há {0}min",
   "time.hoursAgo": "há {0}h",
-  "time.daysAgo": "há {0}d"
+  "time.daysAgo": "há {0}d",
+  "approvePlan.comments": "Comentários",
+  "approvePlan.noComments": "Nenhum comentário ainda. Passe o mouse sobre uma linha para adicionar feedback.",
+  "approvePlan.button.approve": "Aprovar",
+  "approvePlan.button.reject": "Solicitar Alterações",
+  "approvePlan.button.addComment": "Adicionar Comentário",
+  "approvePlan.button.editComment": "Editar",
+  "approvePlan.button.removeComment": "Remover",
+  "approvePlan.button.cancel": "Cancelar",
+  "approvePlan.button.save": "Salvar",
+  "approvePlan.input.commentPlaceholder": "Digite seu feedback...",
+  "approvePlan.panelTitle": "Revisar Plano"
 }

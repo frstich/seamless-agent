@@ -84,7 +84,21 @@ async function main() {
         plugins: [esbuildProblemMatcherPlugin],
     });
 
-    const contexts = [extensionCtx, webviewCtx];
+    // Approve Plan webview bundle (browser)
+    const approvePlanCtx = await esbuild.context({
+        entryPoints: ['src/webview/approvePlan.ts'],
+        bundle: true,
+        format: 'iife',
+        minify: production,
+        sourcemap: !production,
+        sourcesContent: false,
+        platform: 'browser',
+        outfile: 'dist/approvePlan.js',
+        logLevel: 'info',
+        plugins: [esbuildProblemMatcherPlugin],
+    });
+
+    const contexts = [extensionCtx, webviewCtx, approvePlanCtx];
 
     // CLI bundle (Node.js standalone) - Only for Antigravity
     if (antigravity) {

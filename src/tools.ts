@@ -1,12 +1,18 @@
 import * as vscode from 'vscode';
 import { strings } from './localization';
 import { AgentInteractionProvider, AttachmentInfo, UserResponseResult } from './webview/webviewProvider';
+import { ApprovePlanPanel, ApprovePlanResult, PlanComment } from './webview/approvePlanPanel';
 
 
 export interface Input {
     question: string;
     title?: string;
     agentName?: string;
+}
+
+export interface ApprovePlanInput {
+    plan: string;
+    title?: string;
 }
 
 // Result structure returned to the AI
@@ -17,6 +23,12 @@ export interface AskUserToolResult {
         name: string;
         uri: string;
     }>;
+}
+
+// Result structure for approve_plan tool
+export interface ApprovePlanToolResult {
+    approved: boolean;
+    comments: PlanComment[];
 }
 
 /**
@@ -39,7 +51,22 @@ export function registerNativeTools(context: vscode.ExtensionContext, provider: 
         }
     });
 
-    (context.subscriptions as unknown as Array<vscode.Disposable>).push(confirmationTool);
+    // Register the approve_plan tool
+    const approvePlanTool = vscode.lm.registerTool('approve_plan', {
+        async invoke(options: vscode.LanguageModelToolInvocationOptions<ApprovePlanInput>, token: vscode.CancellationToken) {
+            const params = options.input;
+
+            // Show the approve plan panel and wait for user response
+            const result = await approvePlan(params, context, token);
+
+            // Return result to the AI
+            return new vscode.LanguageModelToolResult([
+                new vscode.LanguageModelTextPart(JSON.stringify(result))
+            ]);
+        }
+    });
+
+    (context.subscriptions as unknown as Array<vscode.Disposable>).push(confirmationTool, approvePlanTool);
 }
 
 /**
@@ -163,4 +190,34 @@ async function askViaVSCode(question: string, title: string): Promise<{ responde
     }
 
     return { responded: response.trim().length > 0, response };
+}
+
+/**
+ * Core logic to approve plan, opens a webview panel for user review
+ */
+export async function approvePlan(
+    params: ApprovePlanInput,
+    context: vscode.ExtensionContext,
+    token: vscode.CancellationToken
+): Promise<ApprovePlanToolResult> {
+    const plan = params.plan;
+    const title = params.title || 'Review Plan';
+
+    // Check if already cancelled
+    if (token.isCancellationRequested) {
+        return { approved: false, comments: [] };
+    }
+
+    try {
+        // Show the approve plan panel
+        const result = await ApprovePlanPanel.show(context.extensionUri, plan, title);
+
+        return {
+            approved: result.approved,
+            comments: result.comments
+        };
+    } catch (error) {
+        console.error('Error showing approve plan panel:', error);
+        return { approved: false, comments: [] };
+    }
 }

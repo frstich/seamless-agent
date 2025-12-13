@@ -44,4 +44,16 @@ export const strings = {
     get minutesAgo() { return localize('time.minutesAgo'); },
     get hoursAgo() { return localize('time.hoursAgo'); },
     get daysAgo() { return localize('time.daysAgo'); },
+    // Approve Plan
+    get approvePlanAddCommentAction() { return localize('approvePlan.button.addComment'); },
+    get approvePlanApprove() { return localize('approvePlan.button.approve'); },
+    get approvePlanCancel() { return localize('approvePlan.button.cancel'); },
+    get approvePlanCommentPlaceholder() { return localize('approvePlan.input.commentPlaceholder'); },
+    get approvePlanComments() { return localize('approvePlan.comments'); },
+    get approvePlanEditComment() { return localize('approvePlan.button.editComment'); },
+    get approvePlanNoComments() { return localize('approvePlan.noComments'); },
+    get approvePlanPanelTitle() { return localize('approvePlan.panelTitle'); },
+    get approvePlanReject() { return localize('approvePlan.button.reject'); },
+    get approvePlanRemoveComment() { return localize('approvePlan.button.removeComment'); },
+    get approvePlanSave() { return localize('approvePlan.button.save'); },
 };

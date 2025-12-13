@@ -18,9 +18,18 @@ A Language Model tool that enables Copilot to interactively prompt you for confi
 - **Task Validation** — Confirm whether a task was fulfilled your specs
 - **Seamless Integration** — Works naturally within the Copilot Chat workflow
 
+### Approve Plan Tool (`#approvePlan`)
+
+A Language Model tool that presents a multi-step plan in a dedicated review panel, so you can approve it or request changes with comments anchored to specific parts of the plan.
+
+- **Plan Review Panel** — Review the plan in a focused editor-like view
+- **Targeted Feedback** — Add comments tied to specific headings/paragraphs/list items
+- **Structured Output** — Returns `{ approved, comments: [{ citation, comment }] }` to the agent
+- **Safer Automation** — Prevents execution before you approve the approach
+
 ## Usage
 
-Once installed, the `ask_user` tool is automatically available to GitHub Copilot Chat.
+Once installed, the `ask_user` and `approve_plan` tools are automatically available to GitHub Copilot Chat.
 
 ### Automatic Usage
 
@@ -31,17 +40,37 @@ Copilot will automatically use this tool when it needs your confirmation. When t
 3. Type your response
 4. Copilot continues based on your input
 
+### Reviewing a Plan with `approve_plan`
+
+Copilot will use this tool when it wants your sign-off on a plan before proceeding. When triggered:
+
+1. A “Review Plan” editor panel opens
+2. Hover a heading/paragraph/list item and click the comment icon to add feedback
+3. Click **Approve** to proceed, or **Request Changes** to send feedback back to the agent
+4. Copilot continues based on `{ approved, comments }`
+
 ## Tips
 
 ### Recommended System Prompt
 
-To ensure the AI always asks for your confirmation before completing tasks, add the following to your custom instructions or system prompt:
+To ensure the AI requests approval at the right times, add the following to your custom instructions or system prompt:
 
 ```
-Always use the ask_user tool before completing any task to confirm with the user that the request was fulfilled correctly.
+When the task requires multiple steps or non-trivial changes, present a detailed plan using #approvePlan and wait for approval before executing.
+If the plan is rejected, incorporate the comments and submit an updated plan with #approvePlan.
+Always use #askUser before completing any task to confirm the result matches what the user asked for.
 ```
 
 You can add this into your `.github/copilot-instructions.md` file in your project
+
+### Quick tutorial: using `approve_plan`
+
+If you want to explicitly trigger plan review from the start, ask Copilot something like:
+
+```
+Before you change anything, write a step-by-step plan and present it with #approvePlan.
+Wait for my approval (or requested changes). Only then implement the plan.
+```
 
 ## Requirements
 
@@ -57,6 +86,12 @@ This extension works out of the box with no configuration required. You only nee
 None at this time. Please report issues on [GitHub](https://github.com/jraylan/seamless-agent/issues).
 
 ## Release Notes
+
+### 0.1.8
+
+#### Added
+
+- **Approve Plan Tool**: Added `approve_plan` (`#approvePlan`) to let users review/approve plans with inline comments before execution (VSCode)
 
 ### 0.1.7
 

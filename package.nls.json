@@ -19,5 +19,16 @@
   "time.justNow": "just now",
   "time.minutesAgo": "{0}m ago",
   "time.hoursAgo": "{0}h ago",
-  "time.daysAgo": "{0}d ago"
+  "time.daysAgo": "{0}d ago",
+  "approvePlan.button.addComment": "Add Comment",
+  "approvePlan.button.approve": "Approve",
+  "approvePlan.button.cancel": "Cancel",
+  "approvePlan.button.editComment": "Edit",
+  "approvePlan.button.reject": "Request Changes",
+  "approvePlan.button.removeComment": "Remove",
+  "approvePlan.button.save": "Save",
+  "approvePlan.comments": "Comments",
+  "approvePlan.input.commentPlaceholder": "Enter your feedback...",
+  "approvePlan.noComments": "No comments yet. Hover over a line to add feedback.",
+  "approvePlan.panelTitle": "Review Plan"
 }

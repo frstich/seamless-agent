@@ -18,9 +18,18 @@ Uma ferramenta de Language Model que permite ao Copilot solicitar confirmação 
 - **Validação de Tarefas** — Confirme se uma tarefa foi concluída conforme suas especificações
 - **Integração Seamless** — Funciona naturalmente dentro do fluxo do Copilot Chat
 
+### Ferramenta Approve Plan (`#approvePlan`)
+
+Uma ferramenta de Language Model que apresenta um plano em um painel dedicado de revisão, para você aprovar ou pedir mudanças com comentários vinculados a partes específicas do plano.
+
+- **Revisão de Plano** — Painel focado para ler o plano com calma
+- **Feedback Direcionado** — Comente em títulos/parágrafos/itens de lista específicos
+- **Retorno Estruturado** — Retorna `{ approved, comments: [{ citation, comment }] }` para o agente
+- **Mais Segurança** — Evita execução antes da sua aprovação
+
 ## Como Usar
 
-Após a instalação, a ferramenta `ask_user` está automaticamente disponível para o GitHub Copilot Chat.
+Após a instalação, as ferramentas `ask_user` e `approve_plan` estão automaticamente disponíveis para o GitHub Copilot Chat.
 
 ### Uso Automático
 
@@ -31,17 +40,37 @@ O Copilot usará automaticamente esta ferramenta quando precisar da sua confirma
 3. Digite sua resposta
 4. O Copilot continua baseado na sua resposta
 
+### Revisando um plano com `approve_plan`
+
+O Copilot usará esta ferramenta quando quiser sua aprovação em um plano antes de prosseguir. Quando acionada:
+
+1. Um painel “Review Plan” (Revisar Plano) abre no editor
+2. Passe o mouse sobre um título/parágrafo/item de lista e clique no ícone de comentário para adicionar feedback
+3. Clique em **Approve** para seguir, ou **Request Changes** para pedir ajustes
+4. O Copilot continua com base em `{ approved, comments }`
+
 ## Dicas
 
 ### Prompt de Sistema Recomendado
 
-Para garantir que a IA sempre peça sua confirmação antes de concluir tarefas, adicione o seguinte às suas instruções personalizadas ou prompt de sistema:
+Para garantir que a IA peça aprovação nos momentos certos, adicione o seguinte às suas instruções personalizadas ou prompt de sistema:
 
 ```
-Sempre use a ferramenta ask_user antes de concluir qualquer tarefa para confirmar com o usuário que a solicitação foi atendida corretamente.
+Quando a tarefa exigir múltiplos passos ou mudanças não triviais, apresente um plano detalhado usando #approvePlan e aguarde aprovação antes de executar.
+Se o plano for rejeitado, incorpore os comentários e envie um plano atualizado com #approvePlan.
+Sempre use #askUser antes de concluir qualquer tarefa para confirmar com o usuário que a solicitação foi atendida corretamente.
 ```
 
 Você pode adicionar isso ao arquivo `.github/copilot-instructions.md` do seu projeto
+
+### Tutorial rápido: usando `approve_plan`
+
+Se você quiser forçar a revisão do plano desde o começo, peça algo como:
+
+```
+Antes de mudar qualquer coisa, escreva um plano passo a passo e apresente com #approvePlan.
+Aguarde minha aprovação (ou pedidos de ajuste). Só então implemente o plano.
+```
 
 ## Requisitos
 
@@ -57,6 +86,12 @@ Esta extensão funciona imediatamente sem necessidade de configuração.
 Nenhum até o momento. Por favor, reporte problemas no [GitHub](https://github.com/jraylan/seamless-agent/issues).
 
 ## Notas de Versão
+
+### 0.1.8
+
+#### Adicionado
+
+- **Approve Plan**: Adicionada a ferramenta `approve_plan` (`#approvePlan`) para revisar/aprovar planos com comentários antes da execução (VSCode)
 
 ### 0.1.7
 
