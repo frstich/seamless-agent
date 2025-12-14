@@ -1,4 +1,4 @@
-name: Manual Publish Antigravity
+name: Manual Publish Vscode
 
 on:
   workflow_dispatch:
